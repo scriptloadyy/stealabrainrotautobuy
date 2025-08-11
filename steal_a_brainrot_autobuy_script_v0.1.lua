@@ -251,4 +251,5 @@ TextChatService.OnIncomingMessage = function(message, channel)
             print("✅ Script successfully disconnected.")
         end
     end
-endw
+
+end

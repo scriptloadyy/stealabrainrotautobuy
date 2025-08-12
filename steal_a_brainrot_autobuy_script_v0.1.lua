@@ -1,9 +1,10 @@
--- Last updated 10 August 2025 21:00
+-- Last updated 12 August 2025 14:15 CDT
+-- Added new brainrots Nooo My Hotspot, Tipi Topi Taco, and Bombardini Tortinii.
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.1 — Last Updated 10 August 2025 21:00"
+local version = "Version 0.2 — Last Updated 12 August 2025 14:15 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -75,7 +76,7 @@ local allowedNames = {
     ["Los Crocodillitos"] = false,
     ["Espresso Signora"] = true, -- Admin only, probably leave it as true.
     ["Odin Din Din Dun"] = false,
-    ["Statutino Libertino"] = false,
+    ["Statutino Libertino"] = true, -- Admin only, probably leave it as true.
     ["Tukanno Bananno"] = false,
     ["Trenostruzzo Turbo 3000"] = false,
     ["Trippi Troppi Troppa Trippa"] = false,
@@ -86,6 +87,8 @@ local allowedNames = {
     ["Tigroligre Frutonni"] = false,
     ["Orcalero Orcala"] = false,
     ["Bulbito Bandito Traktorito"] = false,
+    ["Tipi Topi Taco"] = true,
+    ["Bombardini Tortinii"] = true,
     -- Secret
     ["La Vacca Saturno Saturnita"] = true,
     ["Karkerkar Kurkur"] = true, -- Admin only, probably leave it as true.
@@ -104,7 +107,8 @@ local allowedNames = {
     ["Dragon Cannelloni"] = true,
     ["Torrtuginni Dragonfrutini"] = true,
     ["Pot Hotspot"] = true,
-    ["Esok Sekolah"] = true
+    ["Esok Sekolah"] = true,
+    ["Nooo My Hotspot"] = true
 }
 
 local animalsFolder = workspace:WaitForChild("MovingAnimals")
@@ -144,7 +148,6 @@ local function tweenToAnimal(animal)
 
     local hrp = animal:FindFirstChild("HumanoidRootPart")
     if not hrp then
-        warn("HumanoidRootPart missing for animal:", animal.Name)
         return
     end
 
@@ -191,25 +194,21 @@ childAddedConnection = animalsFolder.ChildAdded:Connect(function(animal)
 
     local hrp = animal:WaitForChild("HumanoidRootPart", 5)
     if not hrp then
-        warn("Timed out waiting for HumanoidRootPart in animal:", animal.Name)
         return
     end
 
     local info = hrp:WaitForChild("Info", 5)
     if not info then
-        warn("Timed out waiting for Info in HumanoidRootPart of animal:", animal.Name)
         return
     end
 
     local overhead = info:WaitForChild("AnimalOverhead", 5)
     if not overhead then
-        warn("Timed out waiting for AnimalOverhead in Info of animal:", animal.Name)
         return
     end
 
     local displayName = overhead:WaitForChild("DisplayName", 5)
     if not displayName then
-        warn("Timed out waiting for DisplayName in AnimalOverhead of animal:", animal.Name)
         return
     end
 
@@ -218,7 +217,6 @@ childAddedConnection = animalsFolder.ChildAdded:Connect(function(animal)
 
         local promptAttachment = hrp:FindFirstChild("PromptAttachment")
         if not promptAttachment then
-            warn("PromptAttachment missing in HumanoidRootPart for", displayName.Text)
             return
         end
 
@@ -253,3 +251,4 @@ TextChatService.OnIncomingMessage = function(message, channel)
     end
 
 end
+

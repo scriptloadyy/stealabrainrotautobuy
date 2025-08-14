@@ -1,10 +1,10 @@
--- Last updated 12 August 2025 14:15 CDT
--- Added new brainrots Nooo My Hotspot, Tipi Topi Taco, and Bombardini Tortinii.
+-- Last updated 14 August 2025 13:52 CDT
+-- Fixed typos xd
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.2 — Last Updated 12 August 2025 14:15 CDT"
+local version = "Version 0.3 — Last Updated 14 August 2025 13:52 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -41,7 +41,7 @@ local allowedNames = {
     ["Penguino Cocosino"] = false,
     -- Legendary
     ["Burbaloni Loliloli"] = false,
-    ["Chimpazini Bananini"] = false,
+    ["Chimpanzini Bananini"] = false,
     ["Ballerina Cappuccina"] = false,
     ["Chef Crabracadabra"] = false,
     ["Lionel Cactuseli"] = false,
@@ -249,6 +249,4 @@ TextChatService.OnIncomingMessage = function(message, channel)
             print("✅ Script successfully disconnected.")
         end
     end
-
 end
-

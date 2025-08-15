@@ -1,10 +1,11 @@
--- Last updated 14 August 2025 13:52 CDT
--- Fixed typos xd
+-- Last updated 15 August 2025 14:25 CDT
+-- Added Tracoducotulu Delapeladustuz, Tralalita Tralala, Urubini Flamenguini, Los Matteos, and Job Job Job Sahur.
+
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.3 — Last Updated 14 August 2025 13:52 CDT"
+local version = "Version 0.4 — Last Updated 15 August 2025 14:25 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -89,6 +90,9 @@ local allowedNames = {
     ["Bulbito Bandito Traktorito"] = false,
     ["Tipi Topi Taco"] = true,
     ["Bombardini Tortinii"] = true,
+	["Tracoducotulu Delapeladustuz"] = true,
+	["Tralalita Tralala"] = true,
+	["Urubini Flamenguini"] = true,
     -- Secret
     ["La Vacca Saturno Saturnita"] = true,
     ["Karkerkar Kurkur"] = true, -- Admin only, probably leave it as true.
@@ -108,7 +112,9 @@ local allowedNames = {
     ["Torrtuginni Dragonfrutini"] = true,
     ["Pot Hotspot"] = true,
     ["Esok Sekolah"] = true,
-    ["Nooo My Hotspot"] = true
+    ["Nooo My Hotspot"] = true,
+	["Los Matteos"] = true,
+	["Job Job Job Sahur"] = true
 }
 
 local animalsFolder = workspace:WaitForChild("MovingAnimals")

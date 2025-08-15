@@ -1,11 +1,12 @@
--- Last updated 15 August 2025 14:25 CDT
+-- Last updated 15 August 2025 14:56 CDT
 -- Added Tracoducotulu Delapeladustuz, Tralalita Tralala, Urubini Flamenguini, Los Matteos, and Job Job Job Sahur.
+-- Fixed directory changes
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.4 — Last Updated 15 August 2025 14:25 CDT"
+local version = "Version 0.41 — Last Updated 15 August 2025 14:56 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -73,17 +74,17 @@ local allowedNames = {
     ["Girafa Celestre"] = false,
     ["Gattatino Neonino"] = true, -- Admin only, probably leave it as true.
     ["Matteo"] = true, -- Admin only, probably leave it as true.
-    ["Tralalero Tralala"] = false,
-    ["Los Crocodillitos"] = false,
+    ["Tralalero Tralala"] = true,
+    ["Los Crocodillitos"] = true,
     ["Espresso Signora"] = true, -- Admin only, probably leave it as true.
-    ["Odin Din Din Dun"] = false,
+    ["Odin Din Din Dun"] = true,
     ["Statutino Libertino"] = true, -- Admin only, probably leave it as true.
     ["Tukanno Bananno"] = false,
-    ["Trenostruzzo Turbo 3000"] = false,
-    ["Trippi Troppi Troppa Trippa"] = false,
-    ["Ballerino Lololo"] = false,
+    ["Trenostruzzo Turbo 3000"] = true,
+    ["Trippi Troppi Troppa Trippa"] = true,
+    ["Ballerino Lololo"] = true,
     ["Los Tungtungtungcitos"] = false,
-    ["Piccione Macchina"] = false,
+    ["Piccione Macchina"] = true,
     ["Los Orcalitos"] = false,
     ["Tigroligre Frutonni"] = false,
     ["Orcalero Orcala"] = false,
@@ -117,7 +118,7 @@ local allowedNames = {
 	["Job Job Job Sahur"] = true
 }
 
-local animalsFolder = workspace:WaitForChild("MovingAnimals")
+local animalsFolder = workspace
 local plr = Players.LocalPlayer
 
 local updateTargetInterval = 0.1
@@ -152,7 +153,7 @@ local function tweenToAnimal(animal)
     local playerHRP = workspace[plr.Name]:WaitForChild("HumanoidRootPart")
     local lastUpdate = 0
 
-    local hrp = animal:FindFirstChild("HumanoidRootPart")
+    local hrp = animal:FindFirstChild("Part")
     if not hrp then
         return
     end
@@ -168,7 +169,7 @@ local function tweenToAnimal(animal)
     while running and (playerHRP.Position - targetPos).Magnitude > acceptableDistance do
         local now = tick()
         if now - lastUpdate > updateTargetInterval then
-            local newHrp = animal:FindFirstChild("HumanoidRootPart")
+            local newHrp = animal:FindFirstChild("Part")
             if newHrp then
                 targetPos = newHrp.Position
             else
@@ -198,7 +199,10 @@ childAddedConnection = animalsFolder.ChildAdded:Connect(function(animal)
         return
     end
 
-    local hrp = animal:WaitForChild("HumanoidRootPart", 5)
+    if not animal:IsA("Model") then
+        return
+end
+    local hrp = animal:WaitForChild("Part", 5)
     if not hrp then
         return
     end

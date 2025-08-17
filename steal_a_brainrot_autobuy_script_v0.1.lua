@@ -1,12 +1,12 @@
--- Last updated 15 August 2025 14:56 CDT
+-- Last updated 16 August 2025 23:43 CDT
 -- Added Tracoducotulu Delapeladustuz, Tralalita Tralala, Urubini Flamenguini, Los Matteos, and Job Job Job Sahur.
--- Fixed directory changes
+-- Fixed directory changes, fixed trivial script pieces, Tracoducotulu Delapeladustuz is now set to false by default
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.41 — Last Updated 15 August 2025 14:56 CDT"
+local version = "Version 0.42 — Last Updated 16 August 2025 23:43 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -69,6 +69,7 @@ local allowedNames = {
     ["Tob Tobi Tobi"] = false,
     ["Ganganzelli Trulala"] = false,
     ["Te Te Te Sahur"] = false,
+	["Tracoducotulu Delapeladustuz"] = false,
     -- Brainrot God
     ["Cocofanto Elefanto"] = false,
     ["Girafa Celestre"] = false,
@@ -91,7 +92,6 @@ local allowedNames = {
     ["Bulbito Bandito Traktorito"] = false,
     ["Tipi Topi Taco"] = true,
     ["Bombardini Tortinii"] = true,
-	["Tracoducotulu Delapeladustuz"] = true,
 	["Tralalita Tralala"] = true,
 	["Urubini Flamenguini"] = true,
     -- Secret
@@ -260,3 +260,4 @@ TextChatService.OnIncomingMessage = function(message, channel)
         end
     end
 end
+

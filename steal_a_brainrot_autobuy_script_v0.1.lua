@@ -1,12 +1,11 @@
--- Last updated 16 August 2025 23:43 CDT
--- Added Tracoducotulu Delapeladustuz, Tralalita Tralala, Urubini Flamenguini, Los Matteos, and Job Job Job Sahur.
--- Fixed directory changes, fixed trivial script pieces, Tracoducotulu Delapeladustuz is now set to false by default
+-- Last updated 25 August 2025 15:55 CDT
+-- Added bunch of the new brainrots
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 -- Version info
-local version = "Version 0.42 — Last Updated 16 August 2025 23:43 CDT"
+local version = "Version 0.5 — Last Updated 25 August 2025 15:55 CDT"
 
 -- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
 local allowedNames = {
@@ -19,6 +18,7 @@ local allowedNames = {
     ["Svinina Bombardino"] = false,
     ["Pipi Kiwi"] = false,
     ["Pipi Corni"] = false,
+    ["Raccooni Jandelini"] = false,
     -- Rare
     ["Trippi Troppi"] = false,
     ["Tung Tung Tung Sahur"] = false,
@@ -70,19 +70,21 @@ local allowedNames = {
     ["Ganganzelli Trulala"] = false,
     ["Te Te Te Sahur"] = false,
 	["Tracoducotulu Delapeladustuz"] = false,
+	["Carloo"] = false,
+	["Lerulerulerule"] = false,
     -- Brainrot God
     ["Cocofanto Elefanto"] = false,
     ["Girafa Celestre"] = false,
-    ["Gattatino Neonino"] = true, -- Admin only, probably leave it as true.
+    ["Gattatino Nyanino"] = true, -- Admin only, probably leave it as true.
     ["Matteo"] = true, -- Admin only, probably leave it as true.
-    ["Tralalero Tralala"] = true,
+    ["Tralalero Tralala"] = false,
     ["Los Crocodillitos"] = true,
     ["Espresso Signora"] = true, -- Admin only, probably leave it as true.
-    ["Odin Din Din Dun"] = true,
-    ["Statutino Libertino"] = true, -- Admin only, probably leave it as true.
+    ["Odin Din Din Dun"] = false,
+    ["Unclito Samito"] = true, -- Admin only, probably leave it as true.
     ["Tukanno Bananno"] = false,
-    ["Trenostruzzo Turbo 3000"] = true,
-    ["Trippi Troppi Troppa Trippa"] = true,
+    ["Trenostruzzo Turbo 3000"] = false,
+    ["Trippi Troppi Troppa Trippa"] = false,
     ["Ballerino Lololo"] = true,
     ["Los Tungtungtungcitos"] = false,
     ["Piccione Macchina"] = true,
@@ -93,11 +95,16 @@ local allowedNames = {
     ["Tipi Topi Taco"] = true,
     ["Bombardini Tortinii"] = true,
 	["Tralalita Tralala"] = true,
-	["Urubini Flamenguini"] = true,
+	["Urubini Flamenguini"] = true, -- Admin only, probably leave it as true.
+	["Tartaruga Cisterna"] = true, -- Admin only, probably leave it as true.
+    ["Brr es Teh Patipum"] = false,
+	["Pakrahmatmamat"] = false,
+	["Alessio"] = false,
+	["Los Bombinitos"] = false,
     -- Secret
     ["La Vacca Saturno Saturnita"] = true,
     ["Karkerkar Kurkur"] = true, -- Admin only, probably leave it as true.
-    ["Chimpanzini Spiderini"] = true, -- Admin only, probably leave it as true.
+    ["Sammyni Spyderini"] = true, -- Admin only, probably leave it as true.
     ["Agarrini la Palini"] = true,
     ["Los Tralaleritos"] = true,
     ["Las Tralaleritas"] = true,
@@ -115,7 +122,13 @@ local allowedNames = {
     ["Esok Sekolah"] = true,
     ["Nooo My Hotspot"] = true,
 	["Los Matteos"] = true,
-	["Job Job Job Sahur"] = true
+	["Job Job Job Sahur"] = true,
+	["Bisonte Giuppitere"] = true,
+    ["La Supreme Combinasion"] = true,
+    ["Ketupat Kepat"] = true,
+    ["Los Spyderinis"] = true,
+	["Blackhole Goat"] = true,
+	["Dul Dul Dul"] = true -- Admin only, probably leave it as true.
 }
 
 local animalsFolder = workspace
@@ -260,4 +273,3 @@ TextChatService.OnIncomingMessage = function(message, channel)
         end
     end
 end
-

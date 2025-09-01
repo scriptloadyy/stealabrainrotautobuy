@@ -1,153 +1,181 @@
--- Last updated 25 August 2025 15:55 CDT
--- Added bunch of the new brainrots
+-- Last updated 31 August 2025 20:15 CDT
+-- Updated to continuously move to animal and hold prompt, including Lucky Blocks
 
-local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local workspace = game:GetService("Workspace")
+local running = true
 
 -- Version info
-local version = "Version 0.5 — Last Updated 25 August 2025 15:55 CDT"
+local version = "Version 1.0 — Last Updated 31 August 2025 20:15 CDT"
 
--- This is where the brainrots you wanna buy will be. !! Make sure they all have a , after each entry !!
+-- Allowed pets: only Common and Lucky Blocks included
 local allowedNames = {
+
+    -- Lucky Blocks
+    ["Lucky Block"] = {
+        { Rarity = "Mythic", Purchase = false },
+        { Rarity = "Brainrot God", Purchase = false },
+        { Rarity = "Secret", Purchase = true },
+        { Rarity = "Admin", Purchase = true },
+    },
+
     -- Common
-    ["Noobini Pizzanini"] = false,
-    ["Lirilì Larilà"] = false,
-    ["Tim Cheese"] = false,
-    ["Fluriflura"] = false,
-    ["Talpa Di Fero"] = false,
-    ["Svinina Bombardino"] = false,
-    ["Pipi Kiwi"] = false,
-    ["Pipi Corni"] = false,
-    ["Raccooni Jandelini"] = false,
+    ["Noobini Pizzanini"] = { Purchase = false, Rarity = "Common" },
+    ["Lirilì Larilà"] = { Purchase = false, Rarity = "Common" },
+    ["Tim Cheese"] = { Purchase = false, Rarity = "Common" },
+    ["Fluriflura"] = { Purchase = false, Rarity = "Common" },
+    ["Talpa Di Fero"] = { Purchase = false, Rarity = "Common" },
+    ["Svinina Bombardino"] = { Purchase = false, Rarity = "Common" },
+    ["Pipi Kiwi"] = { Purchase = false, Rarity = "Common" },
+    ["Pipi Corni"] = { Purchase = false, Rarity = "Common" },
+    ["Raccooni Jandelini"] = { Purchase = false, Rarity = "Common" },
+
     -- Rare
-    ["Trippi Troppi"] = false,
-    ["Tung Tung Tung Sahur"] = false,
-    ["Gangster Footera"] = false,
-    ["Bandito Bobritto"] = false,
-    ["Boneca Ambalabu"] = false,
-    ["Cacto Hipopotamo"] = false,
-    ["Ta Ta Ta Ta Sahur"] = false,
-    ["Tric Trac Baraboom"] = false,
-    ["Pipi Avocado"] = false,
+    ["Trippi Troppi"] = { Purchase = false, Rarity = "Rare" },
+    ["Tung Tung Tung Sahur"] = { Purchase = false, Rarity = "Rare" },
+    ["Gangster Footera"] = { Purchase = false, Rarity = "Rare" },
+    ["Bandito Bobritto"] = { Purchase = false, Rarity = "Rare" },
+    ["Boneca Ambalabu"] = { Purchase = false, Rarity = "Rare" },
+    ["Cacto Hipopotamo"] = { Purchase = false, Rarity = "Rare" },
+    ["Ta Ta Ta Ta Sahur"] = { Purchase = false, Rarity = "Rare" },
+    ["Tric Trac Baraboom"] = { Purchase = false, Rarity = "Rare" },
+    ["Pipi Avocado"] = { Purchase = false, Rarity = "Rare" },
+
     -- Epic
-    ["Cappuccino Assassino"] = false,
-    ["Brr Brr Patapim"] = false,
-    ["Trulimero Trulicina"] = false,
-    ["Bambini Crostini"] = false,
-    ["Bananita Dolphinita"] = false,
-    ["Perochello Lemonchello"] = false,
-    ["Brri Brri Bicus Dicus Bombicus"] = false,
-    ["Avocadini Guffo"] = false,
-    ["Ti Ti Ti Sahur"] = false,
-    ["Salamino Penguino"] = false,
-    ["Penguino Cocosino"] = false,
+    ["Cappuccino Assassino"] = { Purchase = false, Rarity = "Epic" },
+    ["Brr Brr Patapim"] = { Purchase = false, Rarity = "Epic" },
+    ["Trulimero Trulicina"] = { Purchase = false, Rarity = "Epic" },
+    ["Bambini Crostini"] = { Purchase = false, Rarity = "Epic" },
+    ["Bananita Dolphinita"] = { Purchase = false, Rarity = "Epic" },
+    ["Perochello Lemonchello"] = { Purchase = false, Rarity = "Epic" },
+    ["Brri Brri Bicus Dicus Bombicus"] = { Purchase = false, Rarity = "Epic" },
+    ["Avocadini Guffo"] = { Purchase = false, Rarity = "Epic" },
+    ["Ti Ti Ti Sahur"] = { Purchase = false, Rarity = "Epic" },
+    ["Salamino Penguino"] = { Purchase = false, Rarity = "Epic" },
+    ["Penguino Cocosino"] = { Purchase = false, Rarity = "Epic" },
+    ["Avocadini Antilopini"] = { Purchase = false, Rarity = "Epic" },
+
     -- Legendary
-    ["Burbaloni Loliloli"] = false,
-    ["Chimpanzini Bananini"] = false,
-    ["Ballerina Cappuccina"] = false,
-    ["Chef Crabracadabra"] = false,
-    ["Lionel Cactuseli"] = false,
-    ["Glorbo Fruttodrillo"] = false,
-    ["Blueberrini Octopusini"] = false,
-    ["Strawberelli Flamingelli"] = false,
-    ["Cocosini Mama"] = false,
-    ["Pandaccini Bananini"] = false,
-    ["Pi Pi Watermelon"] = false,
-    ["Sigma Boy"] = false,
+    ["Burbaloni Loliloli"] = { Purchase = false, Rarity = "Legendary" },
+    ["Chimpanzini Bananini"] = { Purchase = false, Rarity = "Legendary" },
+    ["Ballerina Cappuccina"] = { Purchase = false, Rarity = "Legendary" },
+    ["Chef Crabracadabra"] = { Purchase = false, Rarity = "Legendary" },
+    ["Lionel Cactuseli"] = { Purchase = false, Rarity = "Legendary" },
+    ["Glorbo Fruttodrillo"] = { Purchase = false, Rarity = "Legendary" },
+    ["Blueberrini Octopusini"] = { Purchase = false, Rarity = "Legendary" },
+    ["Strawberelli Flamingelli"] = { Purchase = false, Rarity = "Legendary" },
+    ["Cocosini Mama"] = { Purchase = false, Rarity = "Legendary" },
+    ["Pandaccini Bananini"] = { Purchase = false, Rarity = "Legendary" },
+    ["Pi Pi Watermelon"] = { Purchase = false, Rarity = "Legendary" },
+    ["Sigma Boy"] = { Purchase = false, Rarity = "Legendary" },
+    ["Quivioli Ameleonni"] = { Purchase = false, Rarity = "Legendary" },
+
     -- Mythic
-    ["Frigo Camelo"] = false,
-    ["Orangutini Ananassini"] = false,
-    ["Rhino Toasterino"] = false,
-    ["Bombardiro Crocodilo"] = false,
-    ["Spioniro Golubiro"] = false,
-    ["Bombombini Gusini"] = false,
-    ["Avocadorilla"] = false,
-    ["Zibra Zubra Zibralini"] = false,
-    ["Tigrilini Watermelini"] = false,
-    ["Cavallo Virtuso"] = false,
-    ["Gorillo Watermelondrillo"] = false,
-    ["Tob Tobi Tobi"] = false,
-    ["Ganganzelli Trulala"] = false,
-    ["Te Te Te Sahur"] = false,
-	["Tracoducotulu Delapeladustuz"] = false,
-	["Carloo"] = false,
-	["Lerulerulerule"] = false,
+    ["Frigo Camelo"] = { Purchase = false, Rarity = "Mythic" },
+    ["Orangutini Ananassini"] = { Purchase = false, Rarity = "Mythic" },
+    ["Rhino Toasterino"] = { Purchase = false, Rarity = "Mythic" },
+    ["Bombardiro Crocodilo"] = { Purchase = false, Rarity = "Mythic" },
+    ["Spioniro Golubiro"] = { Purchase = false, Rarity = "Mythic" },
+    ["Bombombini Gusini"] = { Purchase = false, Rarity = "Mythic" },
+    ["Avocadorilla"] = { Purchase = false, Rarity = "Mythic" },
+    ["Zibra Zubra Zibralini"] = { Purchase = false, Rarity = "Mythic" },
+    ["Tigrilini Watermelini"] = { Purchase = false, Rarity = "Mythic" },
+    ["Cavallo Virtuso"] = { Purchase = false, Rarity = "Mythic" },
+    ["Gorillo Watermelondrillo"] = { Purchase = false, Rarity = "Mythic" },
+    ["Tob Tobi Tobi"] = { Purchase = false, Rarity = "Mythic" },
+    ["Ganganzelli Trulala"] = { Purchase = false, Rarity = "Mythic" },
+    ["Te Te Te Sahur"] = { Purchase = false, Rarity = "Mythic" },
+    ["Tracoducotulu Delapeladustuz"] = { Purchase = false, Rarity = "Mythic" },
+    ["Carloo"] = { Purchase = false, Rarity = "Mythic" },
+    ["Lerulerulerule"] = { Purchase = false, Rarity = "Mythic" },
+    ["Carrotini Brainini"] = { Purchase = false, Rarity = "Mythic" },
+
     -- Brainrot God
-    ["Cocofanto Elefanto"] = false,
-    ["Girafa Celestre"] = false,
-    ["Gattatino Nyanino"] = true, -- Admin only, probably leave it as true.
-    ["Matteo"] = true, -- Admin only, probably leave it as true.
-    ["Tralalero Tralala"] = false,
-    ["Los Crocodillitos"] = true,
-    ["Espresso Signora"] = true, -- Admin only, probably leave it as true.
-    ["Odin Din Din Dun"] = false,
-    ["Unclito Samito"] = true, -- Admin only, probably leave it as true.
-    ["Tukanno Bananno"] = false,
-    ["Trenostruzzo Turbo 3000"] = false,
-    ["Trippi Troppi Troppa Trippa"] = false,
-    ["Ballerino Lololo"] = true,
-    ["Los Tungtungtungcitos"] = false,
-    ["Piccione Macchina"] = true,
-    ["Los Orcalitos"] = false,
-    ["Tigroligre Frutonni"] = false,
-    ["Orcalero Orcala"] = false,
-    ["Bulbito Bandito Traktorito"] = false,
-    ["Tipi Topi Taco"] = true,
-    ["Bombardini Tortinii"] = true,
-	["Tralalita Tralala"] = true,
-	["Urubini Flamenguini"] = true, -- Admin only, probably leave it as true.
-	["Tartaruga Cisterna"] = true, -- Admin only, probably leave it as true.
-    ["Brr es Teh Patipum"] = false,
-	["Pakrahmatmamat"] = false,
-	["Alessio"] = false,
-	["Los Bombinitos"] = false,
+    ["Cocofanto Elefanto"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Girafa Celestre"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Gattatino Nyanino"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Matteo"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Tralalero Tralala"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Los Crocodillitos"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Espresso Signora"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Odin Din Din Dun"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Unclito Samito"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Tukanno Bananno"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Trenostruzzo Turbo 3000"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Trippi Troppi Troppa Trippa"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Ballerino Lololo"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Los Tungtungtungcitos"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Piccione Macchina"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Los Orcalitos"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Tigroligre Frutonni"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Orcalero Orcala"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Bulbito Bandito Traktorito"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Tipi Topi Taco"] = { Purchase = true, Rarity = "Brainrot God" },
+    ["Bombardini Tortinii"] = { Purchase = true, Rarity = "Brainrot God" },
+    ["Tralalita Tralala"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Urubini Flamenguini"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Tartaruga Cisterna"] = { Purchase = true, Rarity = "Brainrot God" }, -- Admin only
+    ["Brr es Teh Patipum"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Pakrahmatmamat"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Alessio"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Los Bombinitos"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Crabbo Limonetta"] = { Purchase = true, Rarity = "Brainrot God" },
+    ["Mastodontico Telepiedone"] = { Purchase = false, Rarity = "Brainrot God" },
+    ["Cacasito Satalito"] = { Purchase = false, Rarity = "Brainrot God" },
+
     -- Secret
-    ["La Vacca Saturno Saturnita"] = true,
-    ["Karkerkar Kurkur"] = true, -- Admin only, probably leave it as true.
-    ["Sammyni Spyderini"] = true, -- Admin only, probably leave it as true.
-    ["Agarrini la Palini"] = true,
-    ["Los Tralaleritos"] = true,
-    ["Las Tralaleritas"] = true,
-    ["Las Vaquitas Saturnitas"] = true,
-    ["Graipuss Medussi"] = true,
-    ["Chicleteira Bicicleteira"] = true,
-    ["La Grande Combinasion"] = true,
-    ["Los Combinasionas"] = true,
-    ["Nuclearo Dinossauro"] = true,
-    ["Los Hotspotsitos"] = true,
-    ["Garama and Madundung"] = true,
-    ["Dragon Cannelloni"] = true,
-    ["Torrtuginni Dragonfrutini"] = true,
-    ["Pot Hotspot"] = true,
-    ["Esok Sekolah"] = true,
-    ["Nooo My Hotspot"] = true,
-	["Los Matteos"] = true,
-	["Job Job Job Sahur"] = true,
-	["Bisonte Giuppitere"] = true,
-    ["La Supreme Combinasion"] = true,
-    ["Ketupat Kepat"] = true,
-    ["Los Spyderinis"] = true,
-	["Blackhole Goat"] = true,
-	["Dul Dul Dul"] = true -- Admin only, probably leave it as true.
+    ["La Vacca Saturno Saturnita"] = { Purchase = true, Rarity = "Secret" },
+    ["Karkerkar Kurkur"] = { Purchase = true, Rarity = "Secret" }, -- Admin only
+    ["Sammyni Spyderini"] = { Purchase = true, Rarity = "Secret" }, -- Admin only
+    ["Agarrini la Palini"] = { Purchase = true, Rarity = "Secret" },
+    ["Los Tralaleritos"] = { Purchase = true, Rarity = "Secret" },
+    ["Las Tralaleritas"] = { Purchase = true, Rarity = "Secret" },
+    ["Las Vaquitas Saturnitas"] = { Purchase = true, Rarity = "Secret" },
+    ["Graipuss Medussi"] = { Purchase = true, Rarity = "Secret" },
+    ["Chicleteira Bicicleteira"] = { Purchase = true, Rarity = "Secret" },
+    ["La Grande Combinasion"] = { Purchase = true, Rarity = "Secret" },
+    ["Los Combinasionas"] = { Purchase = true, Rarity = "Secret" },
+    ["Nuclearo Dinossauro"] = { Purchase = true, Rarity = "Secret" },
+    ["Los Hotspotsitos"] = { Purchase = true, Rarity = "Secret" },
+    ["Garama and Madundung"] = { Purchase = true, Rarity = "Secret" },
+    ["Dragon Cannelloni"] = { Purchase = true, Rarity = "Secret" },
+    ["Torrtuginni Dragonfrutini"] = { Purchase = true, Rarity = "Secret" },
+    ["Pot Hotspot"] = { Purchase = true, Rarity = "Secret" },
+    ["Esok Sekolah"] = { Purchase = true, Rarity = "Secret" },
+    ["Nooo My Hotspot"] = { Purchase = true, Rarity = "Secret" },
+    ["Los Matteos"] = { Purchase = true, Rarity = "Secret" },
+    ["Job Job Job Sahur"] = { Purchase = true, Rarity = "Secret" },
+    ["Bisonte Giuppitere"] = { Purchase = true, Rarity = "Secret" },
+    ["La Supreme Combinasion"] = { Purchase = true, Rarity = "Secret" },
+    ["Ketupat Kepat"] = { Purchase = true, Rarity = "Secret" },
+    ["Los Spyderinis"] = { Purchase = true, Rarity = "Secret" },
+    ["Blackhole Goat"] = { Purchase = true, Rarity = "Secret" },
+    ["Dul Dul Dul"] = { Purchase = true, Rarity = "Secret" }, -- Admin only
+    ["Spaghetti Tualetti"] = { Purchase = true, Rarity = "Secret" },
+    ["Ketchuru and Musturu"] = { Purchase = true, Rarity = "Secret" },
+    ["Guerriro Digitale"] = { Purchase = true, Rarity = "Secret" },
+    
+    -- OG
+    ["Strawberry Elephant"] = { Purchase = true, Rarity = "OG" }
 }
-
-local animalsFolder = workspace
-local plr = Players.LocalPlayer
-
-local updateTargetInterval = 0.1
-local acceptableDistance = 4
-local tweenSpeed = 51.261
-
-local running = true
 
 print("————————————————————————————————————————————————————————————")
 print(version)
 
 local function getEnabledPets()
     local pets = {}
-    for name, enabled in pairs(allowedNames) do
-        if enabled then
-            table.insert(pets, name)
+    for name, data in pairs(allowedNames) do
+        if type(data) == "table" then
+            if data.Purchase then
+                table.insert(pets, name)
+            elseif type(data[1]) == "table" then
+                for _, entry in ipairs(data) do
+                    if entry.Purchase then
+                        table.insert(pets, name .. " (" .. entry.Rarity .. ")")
+                    end
+                end
+            end
         end
     end
     if #pets == 0 then
@@ -160,110 +188,83 @@ end
 print("Pets enabled: " .. getEnabledPets())
 print("————————————————————————————————————————————————————————————")
 
-local function tweenToAnimal(animal)
+local function walkToAndPurchase(animal)
     if not running then return end
 
-    local playerHRP = workspace[plr.Name]:WaitForChild("HumanoidRootPart")
-    local lastUpdate = 0
+    local player = workspace:WaitForChild(plr.Name)
+    local humanoid = player:WaitForChild("Humanoid")
+    local humanoidRoot = player:WaitForChild("HumanoidRootPart")
 
-    local hrp = animal:FindFirstChild("Part")
-    if not hrp then
-        return
-    end
+    local targetPart = animal:FindFirstChild("Part")
+    if not targetPart then return end
 
-    local targetPos = hrp.Position
+    local promptAttachment = targetPart:FindFirstChild("PromptAttachment")
+    local prompt = promptAttachment and promptAttachment:FindFirstChild("ProximityPrompt")
 
-    local distance = (targetPos - playerHRP.Position).Magnitude
-    local tweenTime = distance / tweenSpeed
-    local tweenInfo = TweenInfo.new(tweenTime, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(playerHRP, tweenInfo, {CFrame = CFrame.new(targetPos)})
-    tween:Play()
+    while running and targetPart.Parent do
+        local targetPos = targetPart.Position
+        humanoid:MoveTo(targetPos)
 
-    while running and (playerHRP.Position - targetPos).Magnitude > acceptableDistance do
-        local now = tick()
-        if now - lastUpdate > updateTargetInterval then
-            local newHrp = animal:FindFirstChild("Part")
-            if newHrp then
-                targetPos = newHrp.Position
-            else
-                warn("HumanoidRootPart disappeared for animal:", animal.Name)
-                break
-            end
-
-            lastUpdate = now
-
-            tween:Cancel()
-
-            distance = (targetPos - playerHRP.Position).Magnitude
-            tweenTime = distance / tweenSpeed
-            tweenInfo = TweenInfo.new(tweenTime, Enum.EasingStyle.Linear)
-            tween = TweenService:Create(playerHRP, tweenInfo, {CFrame = CFrame.new(targetPos)})
-            tween:Play()
-        end
-        task.wait(0.1)
-    end
-    tween:Cancel()
-end
-
-local childAddedConnection
-childAddedConnection = animalsFolder.ChildAdded:Connect(function(animal)
-    if not running then
-        childAddedConnection:Disconnect()
-        return
-    end
-
-    if not animal:IsA("Model") then
-        return
-end
-    local hrp = animal:WaitForChild("Part", 5)
-    if not hrp then
-        return
-    end
-
-    local info = hrp:WaitForChild("Info", 5)
-    if not info then
-        return
-    end
-
-    local overhead = info:WaitForChild("AnimalOverhead", 5)
-    if not overhead then
-        return
-    end
-
-    local displayName = overhead:WaitForChild("DisplayName", 5)
-    if not displayName then
-        return
-    end
-
-    if allowedNames[displayName.Text] then
-        tweenToAnimal(animal)
-
-        local promptAttachment = hrp:FindFirstChild("PromptAttachment")
-        if not promptAttachment then
-            return
-        end
-
-        local prompt = promptAttachment:FindFirstChild("ProximityPrompt")
         if prompt then
             prompt:InputHoldBegin()
-            task.wait(1)
-            prompt:InputHoldEnd()
-
-            if hrp:FindFirstChildOfClass("Sound") then
-                print("✅ " .. displayName.Text .. " has been successfully purchased.")
-            else
-                print("❌ " .. displayName.Text .. " was unable to be purchased.")
-            end
-        else
-            warn("No ProximityPrompt found for", displayName.Text)
         end
-    else
+
+        task.wait(0.1) -- Update target position and keep holding
+
+        if prompt and targetPart:FindFirstChildOfClass("Sound") then
+            prompt:InputHoldEnd()
+            print("✅ " .. animal.Part.Info.AnimalOverhead.DisplayName.Text .. " has been successfully purchased.")
+            break
+        end
+    end
+end
+
+workspace.ChildAdded:Connect(function(animal)
+    if not running then return end
+    if not animal:IsA("Model") then return end
+
+    local hrp = animal:WaitForChild("Part", 5)
+    if not hrp then return end
+
+    local info = hrp:WaitForChild("Info", 5)
+    if not info then return end
+
+    local overhead = info:WaitForChild("AnimalOverhead", 5)
+    if not overhead then return end
+
+    local displayName = overhead:WaitForChild("DisplayName", 5)
+    local rarity = overhead:FindFirstChild("Rarity")
+    if not displayName then return end
+
+    local petData = allowedNames[displayName.Text]
+
+    if petData then
+        local shouldPurchase = false
+        if petData.Purchase then
+            if petData.Rarity and rarity and rarity.Text ~= petData.Rarity then
+                shouldPurchase = false
+            else
+                shouldPurchase = true
+            end
+        elseif type(petData[1]) == "table" then
+            for _, entry in ipairs(petData) do
+                if entry.Purchase and rarity and entry.Rarity == rarity.Text then
+                    shouldPurchase = true
+                    break
+                elseif entry.Purchase and not rarity then
+                    shouldPurchase = true
+                    break
+                end
+            end
+        end
+
+        if shouldPurchase then
+            walkToAndPurchase(animal)
+        end
     end
 end)
 
 local TextChatService = game:GetService("TextChatService")
-
-
 TextChatService.OnIncomingMessage = function(message, channel)
     if not running then return end
     if message.TextSource and message.TextSource.UserId == plr.UserId then
